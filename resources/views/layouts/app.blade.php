@@ -23,7 +23,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="https://mybdhost.com" target="_blank">
+                <a class="navbar-brand" href="#" target="_blank">
                     {{ config('app.name', 'Laravel') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -59,5 +59,15 @@
             @yield('content')
         </main>
     </div>
+
+
+
+<footer class="footer fixed-bottom ml-5 py-4">
+    Copyright &copy; {{date('Y')}} <strong>  Sujit Paul.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block mr-5">
+      <b> Developed by </b> <a href="https://mybdhost.com" target="_blank"><strong>Mybdhost</strong></a>
+    </div>
+    </footer>
 </body>
 </html>

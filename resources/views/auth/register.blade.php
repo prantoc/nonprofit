@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+                <div class="card-header text-danger">{{ __('Register as a Admin if you want to show admin dashboard !') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
@@ -66,6 +66,12 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
+                            </div>
+
+                               <div class="col-md-6 offset-md-4 mt-3">
+                                <a href="{{route('home')}}" class="btn btn-info">
+                                    {{ __('Back To the Dashboard') }}
+                                </a>
                             </div>
                         </div>
                     </form>
