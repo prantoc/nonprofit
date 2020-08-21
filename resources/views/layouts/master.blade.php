@@ -265,7 +265,7 @@
   <footer class="main-footer">
    Copyright &copy; {{date('Y')}} <strong>  Sujit Paul.</strong>
     All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
+    <div class="float-right">
       <b> Developed by </b> <a href="https://mybdhost.com" target="_blank"><strong>Mybdhost</strong></a>
     </div>
 
@@ -336,3 +336,22 @@
  @yield('scripts')
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

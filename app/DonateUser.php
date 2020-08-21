@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class DonateUser extends Model
 {
       protected $fillable = [
-        'name', 'address', 'phone','amount', 'month','year', 'january', 'february','march','april','may','june','july','august','september','october','november','december',
+        'doner_id','amount', 'year', 'january', 'february','march','april','may','june','july','august','september','october','november','december',
     ];
+
+
+      public function doner() {
+        return $this->belongsTo(Doner::class, 'doner_id');
+    }
 }

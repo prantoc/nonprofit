@@ -65,9 +65,29 @@
 <footer class="footer fixed-bottom ml-5 py-4">
     Copyright &copy; {{date('Y')}} <strong>  Sujit Paul.</strong>
     All rights reserved.
-    <div class="float-right d-none d-sm-inline-block mr-5">
+    <div class="float-right  mr-5">
       <b> Developed by </b> <a href="https://mybdhost.com" target="_blank"><strong>Mybdhost</strong></a>
     </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.8.5/dist/sweetalert2.all.min.js"></script>
+
+<script>
+  const Toast = Swal.mixin({
+     toast: true,
+     position: 'top-end',
+     showConfirmButton: false,
+     timer: 6000
+   });
+
+  @if (session()->has('message'))
+
+    Toast.fire({
+      type: "{!! session()->get('type')  !!}",
+      title: "{!! session()->get('message')  !!}"
+    })
+  {{ Session::forget('message')}}
+  @endif
+</script>
 </body>
 </html>
