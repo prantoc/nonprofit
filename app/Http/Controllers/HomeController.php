@@ -12,7 +12,12 @@ use App\DonateUser;
 use App\Occasion;
 use App\OccasionAmount;
 use App\Investment;
+use App\Deposit;
 use App\UserYear;
+use App\Exports\UsersExport;
+use App\Exports\OccasionsExport;
+use App\Exports\InvestsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {
@@ -31,6 +36,21 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+
+   public function exportUsers() 
+    {
+        return Excel::download(new UsersExport, 'usersdata.xlsx');
+    }
+     public function exportOccasions() 
+    {
+        return Excel::download(new OccasionsExport, 'occasiondata.xlsx');
+    }
+
+    public function exportInvesments() 
+    {
+        return Excel::download(new InvestsExport, 'investsdata.xlsx');
+    }
+
     public function index()
     {
         $data['route'] = "add-user";
@@ -46,8 +66,11 @@ class HomeController extends Controller
         $data['allUsers'] = Doner::all()->count();
         $data['dusers'] = Doner::orderBy('id','desc')->get();
         $data['duserst'] = DonateUser::orderBy('id','desc')->get();
-         $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
+        $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
         $data['totalcutfund']= OccasionAmount::all()->sum('cutfund');
+        $data['totaldeposit']= Deposit::all()->sum('deposit_funds');
+        $data['totalwithdraw']= Deposit::all()->sum('withdraw_funds');
+
         $totalAmount1= DonateUser::all()->sum('january');
         $totalAmount2 = DonateUser::all()->sum('february');
         $totalAmount3 = DonateUser::all()->sum('march');
@@ -405,6 +428,8 @@ class HomeController extends Controller
             $data['allUsers'] = Doner::all()->count();
             $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
             $data['totalcutfund']= OccasionAmount::all()->sum('cutfund');
+             $data['totaldeposit']= Deposit::all()->sum('deposit_funds');
+        $data['totalwithdraw']= Deposit::all()->sum('withdraw_funds');
             $totalAmount1= DonateUser::all()->sum('january');
             $totalAmount2 = DonateUser::all()->sum('february');
             $totalAmount3 = DonateUser::all()->sum('march');
@@ -465,94 +490,7 @@ class HomeController extends Controller
         }
 
 
-
-
-
-
-
-
-
-
-    public function singleOccasion($id)
-        {
-
-         $data['suroute'] = 'single-user-update';
-         $data['singleUser'] = 0;
-         $data['singleOccasion'] = 1;
-            
-        $data['allUsers'] = Doner::all()->count();
-        $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
-        $data['totalcutfund']= OccasionAmount::all()->sum('cutfund');
-        $totalAmount1= DonateUser::all()->sum('january');
-        $totalAmount2 = DonateUser::all()->sum('february');
-        $totalAmount3 = DonateUser::all()->sum('march');
-        $totalAmount4 = DonateUser::all()->sum('april');
-        $totalAmount5 = DonateUser::all()->sum('may');
-        $totalAmount6 = DonateUser::all()->sum('june');
-        $totalAmount7 = DonateUser::all()->sum('july');
-        $totalAmount8 = DonateUser::all()->sum('august');
-        $totalAmount9 = DonateUser::all()->sum('september');
-        $totalAmount10 = DonateUser::all()->sum('october');
-        $totalAmount11 = DonateUser::all()->sum('november');
-        $totalAmount12 = DonateUser::all()->sum('december');
-
-        $data['totalAmount'] = $totalAmount1+$totalAmount2+$totalAmount3+$totalAmount4+$totalAmount5+$totalAmount6+$totalAmount7+$totalAmount8+$totalAmount9+$totalAmount10+$totalAmount11+$totalAmount12;
-
-        $data['totalinvst']= Investment::all()->sum('amount');
-        $totalA1= Investment::all()->sum('january');
-        $totalA2 = Investment::all()->sum('february');
-        $totalA3 = Investment::all()->sum('march');
-        $totalA4 = Investment::all()->sum('april');
-        $totalA5 = Investment::all()->sum('may');
-        $totalA6 = Investment::all()->sum('june');
-        $totalA7 = Investment::all()->sum('july');
-        $totalA8 = Investment::all()->sum('august');
-        $totalA9 = Investment::all()->sum('september');
-        $totalA10 = Investment::all()->sum('october');
-        $totalA11 = Investment::all()->sum('november');
-        $totalA12 = Investment::all()->sum('december');
-
-        $data['totalPaid'] = $totalA1+$totalA2+$totalA3+$totalA4+$totalA5+$totalA6+$totalA7+$totalA8+$totalA9+$totalA10+$totalA11+$totalA12;
-
-        $data['occasion'] = Occasion::findOrFail($id);
-       
-        $duid = OccasionAmount::whereOccasionId($id)->first();
-
-        if ($duid) {
-            $donerid = $duid->occasion_id;
-        } 
-        $di = $donerid;
-        $data['oamounts'] = OccasionAmount::whereOccasionId($di)->orderBy('id','asc')->get();
-
-            $adf= OccasionAmount::whereOccasionId($di)->sum('addfund');
-            $ctf= OccasionAmount::whereOccasionId($di)->sum('cutfund');
-
-            $data['tmbi'] = $adf-$ctf;
-            $data['adf'] = $adf;
-            $data['ctf'] = $ctf;
-
-
-
-        return view('single-post', $data);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function singleUserUpdate($id, Request $request)
+  public function singleUserUpdate($id, Request $request)
     {
           $this->validate($request, [
             'doner_id' => 'required',
@@ -652,6 +590,9 @@ class HomeController extends Controller
         return redirect()->back();
 
     }
+ 
+
+
 
 
       public function occasion()
@@ -665,6 +606,11 @@ class HomeController extends Controller
         $data['edroute'] = "edit-occasion-amount";
         $data['uproute'] = 'update-occasion-amount';
         $data['dlroute'] = "delete-occasion-amount";
+
+        $data['occs'] = 1;
+        $data['depo'] = 0;
+
+
         $data['allUsers'] = Doner::all()->count();
         $data['dusers'] = DonateUser::orderBy('id','desc')->get();
         $data['occasions'] = Occasion::orderBy('id','desc')->get();
@@ -672,6 +618,8 @@ class HomeController extends Controller
 
         $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
         $data['totalcutfund']= OccasionAmount::all()->sum('cutfund');
+         $data['totaldeposit']= Deposit::all()->sum('deposit_funds');
+        $data['totalwithdraw']= Deposit::all()->sum('withdraw_funds');
 
 
         $totalAmount1= DonateUser::all()->sum('january');
@@ -788,6 +736,74 @@ class HomeController extends Controller
 }
 
 
+    public function singleOccasion($id)
+        {
+
+         $data['suroute'] = 'single-user-update';
+         $data['singleUser'] = 0;
+         $data['singleOccasion'] = 1;
+            
+        $data['allUsers'] = Doner::all()->count();
+        $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
+        $data['totalcutfund']= OccasionAmount::all()->sum('cutfund');
+         $data['totaldeposit']= Deposit::all()->sum('deposit_funds');
+        $data['totalwithdraw']= Deposit::all()->sum('withdraw_funds');
+        $totalAmount1= DonateUser::all()->sum('january');
+        $totalAmount2 = DonateUser::all()->sum('february');
+        $totalAmount3 = DonateUser::all()->sum('march');
+        $totalAmount4 = DonateUser::all()->sum('april');
+        $totalAmount5 = DonateUser::all()->sum('may');
+        $totalAmount6 = DonateUser::all()->sum('june');
+        $totalAmount7 = DonateUser::all()->sum('july');
+        $totalAmount8 = DonateUser::all()->sum('august');
+        $totalAmount9 = DonateUser::all()->sum('september');
+        $totalAmount10 = DonateUser::all()->sum('october');
+        $totalAmount11 = DonateUser::all()->sum('november');
+        $totalAmount12 = DonateUser::all()->sum('december');
+
+        $data['totalAmount'] = $totalAmount1+$totalAmount2+$totalAmount3+$totalAmount4+$totalAmount5+$totalAmount6+$totalAmount7+$totalAmount8+$totalAmount9+$totalAmount10+$totalAmount11+$totalAmount12;
+
+        $data['totalinvst']= Investment::all()->sum('amount');
+        $totalA1= Investment::all()->sum('january');
+        $totalA2 = Investment::all()->sum('february');
+        $totalA3 = Investment::all()->sum('march');
+        $totalA4 = Investment::all()->sum('april');
+        $totalA5 = Investment::all()->sum('may');
+        $totalA6 = Investment::all()->sum('june');
+        $totalA7 = Investment::all()->sum('july');
+        $totalA8 = Investment::all()->sum('august');
+        $totalA9 = Investment::all()->sum('september');
+        $totalA10 = Investment::all()->sum('october');
+        $totalA11 = Investment::all()->sum('november');
+        $totalA12 = Investment::all()->sum('december');
+
+        $data['totalPaid'] = $totalA1+$totalA2+$totalA3+$totalA4+$totalA5+$totalA6+$totalA7+$totalA8+$totalA9+$totalA10+$totalA11+$totalA12;
+
+        $data['occasion'] = Occasion::findOrFail($id);
+       
+        $duid = OccasionAmount::whereOccasionId($id)->first();
+
+        if ($duid) {
+            $donerid = $duid->occasion_id;
+        } 
+        $di = $donerid;
+        $data['oamounts'] = OccasionAmount::whereOccasionId($di)->orderBy('id','asc')->get();
+
+            $adf= OccasionAmount::whereOccasionId($di)->sum('addfund');
+            $ctf= OccasionAmount::whereOccasionId($di)->sum('cutfund');
+
+            $data['tmbi'] = $adf-$ctf;
+            $data['adf'] = $adf;
+            $data['ctf'] = $ctf;
+
+
+
+        return view('single-post', $data);
+        }
+
+
+
+
 
 
      public function addOccasionAmount(Request $request)
@@ -897,26 +913,6 @@ class HomeController extends Controller
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        public function investment()
     {
         $data['route'] = "add-user";
@@ -937,6 +933,10 @@ class HomeController extends Controller
         $data['iusers'] = Investment::orderBy('id','desc')->get();
         $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
         $data['totalcutfund']= OccasionAmount::all()->sum('cutfund');
+         $data['totaldeposit']= Deposit::all()->sum('deposit_funds');
+        $data['totalwithdraw']= Deposit::all()->sum('withdraw_funds');
+
+
         $totalAmount1= DonateUser::all()->sum('january');
         $totalAmount2 = DonateUser::all()->sum('february');
         $totalAmount3 = DonateUser::all()->sum('march');
@@ -1200,6 +1200,157 @@ class HomeController extends Controller
 
 }
 
+
+
+      public function deposit()
+    {
+        $data['route'] = "add-deposit";
+        $data['eroute'] = "edit-deposit";
+        $data['uroute'] = 'update-deposit';
+        $data['droute'] = "delete-deposit";
+
+        $data['occs'] = 0;
+        $data['depo'] = 1;
+
+
+        $data['allUsers'] = Doner::all()->count();
+        $data['dusers'] = DonateUser::orderBy('id','desc')->get();
+        $data['occasions'] = Occasion::orderBy('id','desc')->get();
+        $data['deposits'] = Deposit::orderBy('id','desc')->get();
+
+        $data['totaladdfund']= OccasionAmount::all()->sum('addfund');
+        $data['totalcutfund']= OccasionAmount::all()->sum('cutfund');
+
+        $data['totaldeposit']= Deposit::all()->sum('deposit_funds');
+        $data['totalwithdraw']= Deposit::all()->sum('withdraw_funds');
+
+
+        $totalAmount1= DonateUser::all()->sum('january');
+        $totalAmount2 = DonateUser::all()->sum('february');
+        $totalAmount3 = DonateUser::all()->sum('march');
+        $totalAmount4 = DonateUser::all()->sum('april');
+        $totalAmount5 = DonateUser::all()->sum('may');
+        $totalAmount6 = DonateUser::all()->sum('june');
+        $totalAmount7 = DonateUser::all()->sum('july');
+        $totalAmount8 = DonateUser::all()->sum('august');
+        $totalAmount9 = DonateUser::all()->sum('september');
+        $totalAmount10 = DonateUser::all()->sum('october');
+        $totalAmount11 = DonateUser::all()->sum('november');
+        $totalAmount12 = DonateUser::all()->sum('december');
+
+        $data['totalAmount'] = $totalAmount1+$totalAmount2+$totalAmount3+$totalAmount4+$totalAmount5+$totalAmount6+$totalAmount7+$totalAmount8+$totalAmount9+$totalAmount10+$totalAmount11+$totalAmount12;
+
+          
+        $data['totalinvst']= Investment::all()->sum('amount');
+        $totalA1= Investment::all()->sum('january');
+        $totalA2 = Investment::all()->sum('february');
+        $totalA3 = Investment::all()->sum('march');
+        $totalA4 = Investment::all()->sum('april');
+        $totalA5 = Investment::all()->sum('may');
+        $totalA6 = Investment::all()->sum('june');
+        $totalA7 = Investment::all()->sum('july');
+        $totalA8 = Investment::all()->sum('august');
+        $totalA9 = Investment::all()->sum('september');
+        $totalA10 = Investment::all()->sum('october');
+        $totalA11 = Investment::all()->sum('november');
+        $totalA12 = Investment::all()->sum('december');
+
+        $data['totalPaid'] = $totalA1+$totalA2+$totalA3+$totalA4+$totalA5+$totalA6+$totalA7+$totalA8+$totalA9+$totalA10+$totalA11+$totalA12;
+        return view('occasion', $data);
+    }
+
+
+
+
+
+     public function addDeposit(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|numeric', 
+            'deposit_funds' => 'nullable|numeric',
+            'withdraw_funds' => 'nullable|numeric',
+        ]);
+
+        $depo['name'] = $request->name;
+        $depo['phone'] = $request->phone;
+        $depo['deposit_funds'] = $request->deposit_funds;
+        $depo['withdraw_funds'] = $request->withdraw_funds;
+      
+
+        Deposit::create($depo);
+        session()->flash('message', 'Deposit Successfully Added!');
+        Session::flash('type', 'success');
+        return redirect()->back();
+    }
+
+
+
+     public function updateDeposit($id, Request $request)
+    {
+          $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|numeric', 
+            'deposit_funds' => 'nullable|numeric',
+            'withdraw_funds' => 'nullable|numeric',
+        ]);
+
+        $udepo = Deposit::findOrFail($id);
+
+        if ($udepo->name != $request->name)
+        {
+            $udepo['name'] = $request->name;
+        }
+
+        if ($udepo->phone != $request->phone)
+        {
+            $udepo['phone'] = $request->phone;
+        } 
+        if ($udepo->deposit_funds != $request->deposit_funds)
+        {
+            $udepo['deposit_funds'] = $request->deposit_funds;
+        }
+
+        if ($udepo->withdraw_funds != $request->withdraw_funds)
+        {
+            $udepo['withdraw_funds'] = $request->withdraw_funds;
+        }
+
+        $udepo->save();
+        session()->flash('message', 'Deposit Successfully Updated!');
+        Session::flash('type', 'success');
+        return redirect()->back();
+
+    }
+
+
+     public function deleteDepPassCheck($id)
+    {
+        $data['droute'] = "delete-deposit";
+        $data['title'] = "Deposit data";
+        $data['user'] = Deposit::findOrFail($id);
+        return view('password_check',$data);
+    }
+
+       public function deleteDeposit($id, Request $request)
+    {
+        $dltdeop = Deposit::findOrFail($id);
+
+        if (!(Hash::check($request->get('current_password'), Auth::user()->password))) {
+            // The passwords matches
+            session()->flash('message', 'Your current password does not matches with your main password. Please try again!');
+            Session::flash('type', 'warning');
+            return redirect()->back();
+        }
+        else{
+        $dltdeop->delete();
+
+        session()->flash('message', 'Deposit SuccessFully Deleted!');
+        Session::flash('type', 'success');
+        return redirect()->route('occasion');
+    }
+
+}
 
 
 

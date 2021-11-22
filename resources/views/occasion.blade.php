@@ -15,7 +15,7 @@
 @section('content')
 <div class="container-fluid">
    <div class="row justify-content-center">
-    
+    @if($occs)
       <div class="col-md-12">
          <div class="row">
             <div class="col-md-5">
@@ -56,7 +56,7 @@
             <div class="col-md-7">
             <div class="card card-primary">
             <div class="card-header">
-               <h3 class="card-title">Occasion Transaction </h3>
+               <h3 class="card-title">Occasion Transaction</h3>
                <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                </div>
@@ -190,6 +190,7 @@
                <div class="card card-primary">
             <div class="card-header">
                <h3 class="card-title">All Occasion Transaction</h3>
+               <h3 class="card-title float-right"> <a href="{{route('download-occasion-data')}}" class=" btn btn-dark mb-1"><i class="far fa-file-excel"></i> </a></h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -305,6 +306,184 @@
          </div>
      
    </div>
+
+   @else
+
+        <div class="col-md-12">
+         <div class="row">
+      
+            <div class="col-md-12">
+            <div class="card card-primary">
+            <div class="card-header">
+               <h3 class="card-title">Add Deposit</h3>
+               <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+               </div>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <div class="card-body">
+               <form method="POST" action="{{ route($route) }}">
+                  @csrf
+                  <div class="row">
+                    
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputname">Name</label>
+                           <input type="text" name="name" class="form-control" id="exampleInputname" placeholder="Enter name">
+                        </div>
+                     </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputname">Phone</label>
+                           <input type="text" name="phone" class="form-control" id="exampleInputname" placeholder="Enter phone number">
+                        </div>
+                     </div>
+                       <div class="col-md-6">
+                          <div class="form-group">
+                           <label>Choose Option</label>
+                           <select class="form-control select2bs4" style="width: 100%;">
+                              <option>Select Option</option>
+                              <option value="deposit_funds">(+) Deposit</option>
+                              <option value="withdraw_funds">(-) Withdraw</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputaddfund">Amount</label>
+                           <input type="text" name="deposit_funds" class="form-control box deposit_funds" id="exampleInputaddfund" placeholder="Enter fund">
+                           <input type="text" name="withdraw_funds" class="form-control box withdraw_funds" id="exampleInputcutfund" placeholder="Enter fund">
+                        </div>
+                     </div>
+                  </div>
+                  <!-- /.card-body -->
+                  <div class="card-footer">
+                     <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+            </div>
+      
+
+                <div class="col-md-12">
+               <div class="card card-primary">
+            <div class="card-header">
+               <h3 class="card-title">All Deposite & Withdraw Transaction</h3>
+               {{-- <h3 class="card-title float-right"> <a href="{{route('download-occasion-data')}}" class=" btn btn-dark mb-1"><i class="far fa-file-excel"></i> </a></h3> --}}
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+               <table id="example2" class="table table-bordered table-striped">
+                  <thead class="text-center">
+                     <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Deposit</th>
+                        <th>Withdraw</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Action</th>
+                     </tr>
+                  </thead>
+                  <tbody class="text-center">
+                     @php $i= 0; @endphp 
+                     @foreach($deposits as $deposit)
+                     @php $i++; @endphp
+                     <tr>
+                        <td>{{ $i}}</td>
+                        <td>{{ $deposit->name}}</td>
+                        <td>{{ $deposit->phone }}</td>
+                        <td>
+                          
+                            @if(!empty($deposit->deposit_funds ))
+                            (+){{ $deposit->deposit_funds }}৳
+                           @else
+                           <span class="badge badge-danger">Empty</span>
+                           @endif
+
+                        </td>
+                        <td>
+                             @if(!empty($deposit->withdraw_funds ))
+                            (-){{ $deposit->withdraw_funds }}৳
+                           @else
+                           <span class="badge badge-danger">Empty</span>
+                           @endif
+                        </td>
+                        <td>{{date('d-m-y/h:i:m A',strtotime($deposit->created_at))}}</td>
+                        <td>{{date('d-m-y/h:i:m A',strtotime($deposit->updated_at))}}</td>
+                        <td>
+                           <a href="{{route('delete-deposit-passcheck',$deposit->id)}}" class="btn btn-danger mb-1"><i class="fas fa-trash-alt"></i> Delete </a>
+                           <a href="{{route($eroute,$deposit->id)}}" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1{{ $deposit->id }}"><i class="fas fa-edit"></i> Edit </a>
+                        </td>
+                     </tr>
+                     <div class="modal fade " id="exampleModal1{{ $deposit->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                           <div class="modal-content">
+                              <div class="modal-header bg-primary">
+                                 <h5 class="modal-title" id="exampleModalLabel">Edit Occasion Transaction</h5>
+                                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                                 </button>
+                              </div>
+                              <!-- form start -->
+                              <div class="card-body">
+                                 <form method="POST" action="{{ route($uroute,$deposit->id)}}">
+                                    @csrf
+                                    <div class="row">
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="exampleInputName">Name</label>
+                                             <input type="text" value="{{$deposit->name}}" name="name" class="form-control" id="exampleInputName" placeholder="Enter name">
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                          <div class="form-group">
+                                             <label for="exampleInputName">Phone</label>
+                                             <input type="text" value="{{$deposit->phone}}" name="phone" class="form-control" id="exampleInputName" placeholder="Enter phone">
+                                          </div>
+                                       </div>
+                                       <div class="col-md-6">
+                                            <div class="form-group">
+                                             <label>Choose Option</label>
+                                             <select class="form-control select2bs4" style="width: 100%;">
+                                                <option>Select Option</option>
+                                                <option value="deposit_funds">(+) Deposit</option>
+                                                <option value="withdraw_funds">(-) Withdraw</option>
+                                             </select>
+                                          </div>
+                                       </div>
+                                          <div class="col-md-6">
+                                             <div class="form-group">
+                                                <label for="exampleInputaddfund">Amount</label>
+                                                <input type="text" name="deposit_funds" class="form-control box deposit_funds" id="exampleInputaddfund" placeholder="Enter fund" value="{{$deposit->deposit_funds}}">
+                                                <input type="text" name="withdraw_funds" class="form-control box withdraw_funds" id="exampleInputwithdraw_funds" placeholder="Enter fund" value="{{$deposit->withdraw_funds}}">
+                                             </div>
+                                          </div>
+                      
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <div class="card-footer">
+                                       <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     @endforeach
+                  </tbody>
+               </table>
+            </div>
+            <!-- /.card-body -->
+         </div>
+            </div>
+         </div>
+     
+   </div>
+   @endif
 </div>
 </div>
 @endsection

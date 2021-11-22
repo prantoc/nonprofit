@@ -3,7 +3,11 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-4">
+             <img src="{{asset('img/img1.jpeg')}}" alt="" style="    height: 391px;
+    width: 379px;">
+        </div>
+        <div class="col-md-8 mt-5">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
@@ -57,11 +61,11 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
+                           {{--      @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </form>

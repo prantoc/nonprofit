@@ -89,7 +89,7 @@
                      <div class="col-md-4">
                         <div class="form-group">
                            <label for="exampleInputPhone">Year</label>
-                           <input type="text" name="year" class="form-control" id="exampleInputPhone" placeholder="Enter phone">
+                           <input type="text" name="year" class="form-control" id="exampleInputPhone" placeholder="Enter year">
                         </div>
                      </div>
                      <div class="col-md-4">
@@ -233,6 +233,7 @@
       <div class="card card-primary">
          <div class="card-header">
             <h3 class="card-title">All User Transactions Data</h3>
+            <h3 class="card-title float-right"> <a href="{{route('download-users-data')}}" class=" btn btn-dark mb-1"><i class="far fa-file-excel"></i> </a></h3>
          </div>
          <!-- /.card-header -->
          <div class="card-body">
@@ -538,6 +539,7 @@
       <div class="card card-primary">
          <div class="card-header">
             <h3 class="card-title">All Investments Data</h3>
+             <h3 class="card-title float-right"> <a href="{{route('download-invest-data')}}" class=" btn btn-dark mb-1"><i class="far fa-file-excel"></i> </a></h3>
          </div>
          <!-- /.card-header -->
          <div class="card-body">

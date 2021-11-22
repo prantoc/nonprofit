@@ -20,6 +20,15 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
 
+
+Route::get('/download-users-data', 'HomeController@exportUsers')->name('download-users-data');
+Route::get('/download-occasion-data', 'HomeController@exportOccasions')->name('download-occasion-data');
+Route::get('/download-invest-data', 'HomeController@exportInvesments')->name('download-invest-data');
+
+
+
+
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::post('add-user', 'HomeController@addUser')->name('add-user');
 Route::get('edit-user/{id}', 'HomeController@editUser')->name('edit-user');
@@ -34,7 +43,6 @@ Route::get('edit-user-transaction/{id}', 'HomeController@editUserTransaction')->
 Route::post('update-user-transaction/{id}', 'HomeController@updateUserTransaction')->name('update-user-transaction');
 Route::get('delete-usertransaction-passcheck/{id}', 'HomeController@deleteUTPassCheck')->name('delete-usertransaction-passcheck');
 Route::post('delete-user-transaction/{id}', 'HomeController@deleteUserTransaction')->name('delete-user-transaction');
-
 
 
 Route::get('single-user/{id}', 'HomeController@singleUser')->name('single-user');
@@ -69,5 +77,20 @@ Route::post('update-investment/{id}', 'HomeController@updateInvestment')->name('
 
 Route::get('delete-investment-passcheck/{id}', 'HomeController@deleteINPassCheck')->name('delete-investment-passcheck');
 Route::post('delete-investment/{id}', 'HomeController@deleteInvestment')->name('delete-investment');
+
+
+
+
+
+
+
+
+Route::get('/deposit', 'HomeController@deposit')->name('deposit');
+Route::post('add-deposit', 'HomeController@addDeposit')->name('add-deposit');
+Route::get('edit-deposit/{id}', 'HomeController@editDeposit')->name('edit-deposit');
+Route::post('update-deposit/{id}', 'HomeController@updateDeposit')->name('update-deposit');
+Route::get('delete-deposit-passcheck/{id}', 'HomeController@deleteDepPassCheck')->name('delete-deposit-passcheck');
+Route::post('delete-deposit/{id}', 'HomeController@deleteDeposit')->name('delete-deposit');
+
 
 });

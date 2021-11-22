@@ -54,7 +54,8 @@
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
       
-      <span class="brand-text font-weight-light">Account App | Dashboard</span>
+      <img src="{{asset('img/logo.jpeg')}}" alt="" style="height: 135px;
+    width: 235px;">
     </a>
 
     <!-- Sidebar -->
@@ -114,7 +115,7 @@
 
          <li class="nav-item">
             <a href="{{route('occasion')}}" class="nav-link {{Request::route()->getName() == 'occasion' ? 'active' : '' }}" class="nav-link">
-              <i class="fas fa-bahai"></i>
+              <i class="nav-icon fas fa-bahai"></i>
               <p>
                 Occasion
               </p>
@@ -123,24 +124,24 @@
 
           <li class="nav-item">
             <a href="{{route('investment')}}" class="nav-link {{Request::route()->getName() == 'investment' ? 'active' : '' }}" class="nav-link">
-              <i class="fas fa-chart-bar"></i>
+              <i class="nav-icon fas fa-chart-bar"></i>
               <p>
                 Investment 
               </p>
             </a>
           </li>
-        {{--    <li class="nav-item">
-            <a href="{{ route('register') }}" class="nav-link {{Request::route()->getName() == 'register' ? 'active' : '' }}" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Register
-              </p>
-            </a>
-          </li> --}}
-         <li class="nav-item">
-            <a class="nav-link" href="{{ route('logout') }}"
-                   onclick="event.preventDefault();
-                                 document.getElementById('logout-form').submit();">
+           <li class="nav-item">
+              <a href="{{route('deposit')}}" class="nav-link {{Request::route()->getName() == 'deposit' ? 'active' : '' }}" class="nav-link">
+                <i class="nav-icon fas fa-piggy-bank"></i>
+                <p>
+                  Deposit 
+                </p>
+              </a>
+            </li>
+           
+
+          <li class="nav-item">
+            <a href="{{ route('logout') }}"onclick="event.preventDefault();document.getElementById('logout-form').submit();" class="nav-link">
               <i class="nav-icon fas fa-power-off"></i>
               <p>
                 Logout
@@ -193,9 +194,9 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{$allUsers}}</h3>
+                <h3>{{$totalAmount}}৳</h3>
 
-                <p>All Users</p>
+                <p>All Users Funded</p>
               </div>
               <div class="icon">
                 <i class="fas fa-user-plus"></i>
@@ -248,6 +249,20 @@
             </div>
           </div>
           <!-- ./col -->
+           <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-dark">
+              <div class="inner">
+                <h3>{{$totaldeposit - $totalwithdraw}}৳</h3>
+
+                <p>Deposit</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-piggy-bank"></i>
+              </div>
+              {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
+            </div>
+          </div>
         </div>
       </div><!-- /.container-fluid -->
     </div>

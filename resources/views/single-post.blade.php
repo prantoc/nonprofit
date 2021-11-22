@@ -79,29 +79,29 @@
                     </b> <a class="float-right">
                        {{-- @foreach($dusert as $duser) --}}
                       @if( $cywf == $duser->year && $cmwf == 1 && !empty($duser->january))
-                      {{ $duser->january }}৳
+                      <span class="badge badge-success">{{ $duser->january }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 2 && !empty($duser->february))
-                      {{ $duser->February }}৳
+                      <span class="badge badge-success">{{ $duser->february }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 3 && !empty($duser->march))
-                      {{ $duser->March }}৳
+                      <span class="badge badge-success">{{ $duser->march }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 4 && !empty($duser->april))
-                      {{ $duser->April }}৳
+                      <span class="badge badge-success">{{ $duser->april }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 5 && !empty($duser->may))
-                      {{ $duser->May }}৳
+                      <span class="badge badge-success">{{ $duser->may }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 6 && !empty($duser->june))
-                      {{ $duser->June }}৳
+                      <span class="badge badge-success">{{ $duser->june }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 7 && !empty($duser->july))
-                      {{ $duser->July }}৳
+                      <span class="badge badge-success">{{ $duser->july }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 8 && !empty($duser->august))
-                      {{ $duser->August }}৳
+                      <span class="badge badge-success">{{ $duser->august }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 9 && !empty($duser->september))
-                      {{ $duser->September }}৳
+                      <span class="badge badge-success">{{ $duser->september }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 10 && !empty($duser->october))
-                      {{ $duser->October }}৳
+                      <span class="badge badge-success">{{ $duser->october }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 11 && !empty($duser->november))
-                      {{ $duser->November }}৳
+                      <span class="badge badge-success">{{ $duser->november }}৳</span>
                       @elseif($cywf == $duser->year && $cmwf == 12 && !empty($duser->december))
-                      {{ $duser->December }}৳
+                      <span class="badge badge-success">{{ $duser->december }}৳</span>
                       @else
                       <span class="badge badge-danger">Dues</span>
                       @endif
